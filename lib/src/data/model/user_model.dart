@@ -8,24 +8,28 @@ class User extends Equatable {
   final String _email;
   final String _photoUrl;
   final String _phoneNumber;
+  final String _address;
 
-  get uid => this.uid;
+  get uid => this._uid;
   get displayName => this._displayName;
   get email => this._email;
   get photoUrl => this._photoUrl;
   get phoneNumber => this._phoneNumber;
+  get address => this._address;
 
-  User(
-      {@required String uid,
-      @required String email,
-      @required String displayName,
-      @required String photoUrl,
-      String phoneNumber})
-      : _uid = uid,
+  User({
+    @required String uid,
+    @required String email,
+    @required String displayName,
+    @required String photoUrl,
+    String phoneNumber,
+    String address,
+  })  : _uid = uid,
         _displayName = displayName,
         _email = email,
         _phoneNumber = phoneNumber,
-        _photoUrl = photoUrl;
+        _photoUrl = photoUrl,
+        _address = address;
 
   factory User.fromFirebaseUser({@required FirebaseUser user}) {
     return User(
@@ -33,10 +37,11 @@ class User extends Equatable {
         email: user.email,
         photoUrl: user.photoUrl,
         phoneNumber: user.phoneNumber,
-        uid: user.uid);
+        uid: user.uid,
+        address: null);
   }
 
   @override
   List<Object> get props =>
-      [_uid, _displayName, _email, _phoneNumber, _photoUrl];
+      [_uid, _displayName, _email, _phoneNumber, _photoUrl, _address];
 }
