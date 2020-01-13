@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -25,6 +26,19 @@ class SavedRoute extends Equatable {
         _finalPoint = finalPoint,
         _initLabel = initLabel,
         _finalLabel = finalLabel;
+
+  factory SavedRoute.fromDoc(DocumentSnapshot doc) {
+    return SavedRoute(
+      id: doc.documentID,
+      initLabel: doc.data["initLabel"],
+      finalLabel: doc.data["finalLabel"],
+      finalPoint: Point(
+          lat: doc.data["finalPoint"]["lat"],
+          lng: doc.data["finalPoint"]["lng"]),
+      initPoint: Point(
+          lat: doc.data["initPoint"]["lat"], lng: doc.data["initPoint"]["lng"]),
+    );
+  }
 
   @override
   List<Object> get props =>

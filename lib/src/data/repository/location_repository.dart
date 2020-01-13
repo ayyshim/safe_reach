@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/services/base.dart';
+import 'package:google_map_polyline/google_map_polyline.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:safe_reach/src/constants/apiKeys.dart';
 import 'package:safe_reach/src/data/model/loc_model.dart';
 
 class LocationRepository {
@@ -65,5 +68,24 @@ class LocationRepository {
     };
 
     return await _firestore.collection("saved_route").add(data);
+  }
+
+  Future<Loc> getMarkerLocation(LatLng latLng) async {
+    final address = await _geocoding.findAddressesFromCoordinates(
+        Coordinates(latLng.latitude, latLng.longitude));
+    final topRes = address.first;
+    return Loc(label: topRes.addressLine, coordinates: topRes.coordinates);
+  }
+
+  Future<List<LatLng>> getPolylines(LatLng origin, LatLng destination) async {
+    print('$origin, $destination');
+    GoogleMapPolyline googleMapPolyline =
+        GoogleMapPolyline(apiKey: ApiKey.DIRECTION_API);
+    final coordinates = await googleMapPolyline.getCoordinatesWithLocation(
+        origin: LatLng(40.677939, -73.941755),
+        destination: LatLng(40.698432, -73.924038),
+        mode: RouteMode.driving);
+    print(coordinates);
+    return coordinates;
   }
 }

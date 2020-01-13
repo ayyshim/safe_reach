@@ -6,6 +6,7 @@ import 'package:safe_reach/src/bloc/location_input/location_input_bloc.dart';
 import 'package:safe_reach/src/bloc/location_input/location_input_event.dart';
 import 'package:safe_reach/src/constants/colors.dart';
 import 'package:safe_reach/src/data/repository/location_repository.dart';
+import 'package:safe_reach/src/ui/screen/add_route_map_screen.dart';
 import 'package:safe_reach/src/ui/widget/appBar.dart';
 import 'package:safe_reach/src/ui/widget/location_input.dart';
 import 'package:safe_reach/src/ui/widget/button.dart';
@@ -126,7 +127,13 @@ class _AddRouteScreenState extends State<AddRouteScreen> {
                         children: <Widget>[
                           BlueButton(
                             label: "Use map",
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (_) {
+                                return AddRouteMapScreen();
+                              }));
+                            },
                           ),
                           PrimaryButton(
                             label: "Save",

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:safe_reach/src/bloc/saved_route/bloc.dart';
 import 'package:safe_reach/src/constants/colors.dart';
 import 'package:safe_reach/src/data/model/saved_route_model.dart';
 import 'package:safe_reach/src/ui/widget/button.dart';
@@ -82,7 +84,8 @@ class SavedRouteItem extends StatelessWidget {
                 iconColor: Colors.white,
                 icon: MdiIcons.trashCan,
                 onPressed: () {
-                  print("Delete");
+                  BlocProvider.of<SavedRouteBloc>(context)
+                      .add(SavedRouteEvent.delete(id: _route.id));
                 },
                 backgroundColor: AppColor.RED,
               )

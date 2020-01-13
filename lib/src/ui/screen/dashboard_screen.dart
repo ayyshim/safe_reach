@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:safe_reach/src/bloc/authentication/bloc.dart';
 import 'package:safe_reach/src/bloc/emergency_contact/emergency_contact_bloc.dart';
 import 'package:safe_reach/src/bloc/emergency_contact/emergency_contact_event.dart';
+import 'package:safe_reach/src/bloc/saved_route/saved_route_bloc.dart';
+import 'package:safe_reach/src/bloc/saved_route/saved_route_event.dart';
 import 'package:safe_reach/src/data/repository/emergency_contact_repository.dart';
+import 'package:safe_reach/src/data/repository/saved_route_repository.dart';
 import 'package:safe_reach/src/ui/widget/appBar.dart';
 import 'package:safe_reach/src/ui/widget/emergency_contacts.dart';
 import 'package:safe_reach/src/ui/widget/profile_card.dart';
@@ -17,14 +20,20 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final EmergencyContactRepository _emergencyContactRepository =
       EmergencyContactRepository();
+  final SavedRouteRepository _savedRouteRepository = SavedRouteRepository();
   EmergencyContactBloc _emergencyContactBloc;
+  SavedRouteBloc _savedRouteBloc;
 
   @override
   void initState() {
     super.initState();
     _emergencyContactBloc = EmergencyContactBloc(
         emergencyContactRepository: _emergencyContactRepository);
+    _savedRouteBloc =
+        SavedRouteBloc(savedRouteRepository: _savedRouteRepository);
     _emergencyContactBloc.add(EmergencyContactEvent.fetch(
+        uid: BlocProvider.of<AuthenticationBloc>(context).authUser.uid));
+    _savedRouteBloc.add(SavedRouteEvent.fetch(
         uid: BlocProvider.of<AuthenticationBloc>(context).authUser.uid));
   }
 
@@ -64,7 +73,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               BlocProvider(
                   create: (_) => _emergencyContactBloc,
                   child: EmergencyContacts()),
-              SavedRoutes()
+              BlocProvider(
+                  create: (_) => _savedRouteBloc, child: SavedRoutes()),
             ],
           ),
         ),
@@ -75,6 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void dispose() {
     _emergencyContactBloc.close();
+    _savedRouteBloc.close();
     super.dispose();
   }
 }
