@@ -7,6 +7,7 @@ import 'package:safe_reach/src/data/repository/emergency_contact_repository.dart
 import 'package:safe_reach/src/ui/widget/appBar.dart';
 import 'package:safe_reach/src/ui/widget/emergency_contacts.dart';
 import 'package:safe_reach/src/ui/widget/profile_card.dart';
+import 'package:safe_reach/src/ui/widget/saved_routes.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -62,7 +63,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               BlocProvider(
                   create: (_) => _emergencyContactBloc,
-                  child: EmergencyContacts())
+                  child: EmergencyContacts()),
+              SavedRoutes()
             ],
           ),
         ),

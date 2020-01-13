@@ -28,26 +28,28 @@ class ContactItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                this._name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  this._name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Text(
-                this._phoneNumber,
-                style: TextStyle(fontSize: 12),
-              ),
-            ],
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  this._phoneNumber,
+                  style: TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
           ),
           Row(
             children: <Widget>[

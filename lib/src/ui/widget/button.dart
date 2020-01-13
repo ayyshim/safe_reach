@@ -69,6 +69,34 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
+class BlueButton extends StatelessWidget {
+  final String _label;
+  final Function _onPressed;
+
+  BlueButton({Key key, @required String label, @required Function onPressed})
+      : _label = label,
+        _onPressed = onPressed,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      onPressed: this._onPressed,
+      child: Text(
+        this._label,
+        style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+      ),
+      color: AppColor.BLUE,
+      elevation: 5,
+      splashColor: AppColor.BLUE_DARK,
+      highlightElevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(28),
+      ),
+    );
+  }
+}
+
 class RoundedIconButton extends StatelessWidget {
   final Color _iconColor;
   final IconData _icon;
