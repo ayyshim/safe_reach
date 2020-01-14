@@ -54,6 +54,7 @@ class MapLocationInputBloc
     } else {
       finalLocation = address;
     }
+
     yield MapLocationInputState.markerUpdated();
   }
 
