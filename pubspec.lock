@@ -331,6 +331,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.21+15"
+  google_maps_util:
+    dependency: "direct main"
+    description:
+      name: google_maps_util
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -443,6 +450,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.11.3+2"
+  lop_polyutil:
+    dependency: "direct main"
+    description:
+      name: lop_polyutil
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   matcher:
     dependency: transitive
     description:

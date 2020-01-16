@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:safe_reach/src/bloc/authentication/authentication_bloc.dart';
 import 'package:safe_reach/src/bloc/saved_route/bloc.dart';
 import 'package:safe_reach/src/constants/colors.dart';
 import 'package:safe_reach/src/data/model/saved_route_model.dart';
+import 'package:safe_reach/src/ui/screen/tracking_screen.dart';
 import 'package:safe_reach/src/ui/widget/button.dart';
 import 'package:safe_reach/src/ui/widget/card.dart';
 
@@ -73,7 +75,13 @@ class SavedRouteItem extends StatelessWidget {
                 iconColor: Colors.white,
                 icon: MdiIcons.mapMarkerPath,
                 onPressed: () {
-                  print("Track");
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return TrackingScreen(
+                      user:
+                          BlocProvider.of<AuthenticationBloc>(context).authUser,
+                      route: _route,
+                    );
+                  }));
                 },
                 backgroundColor: AppColor.BLUE,
               ),

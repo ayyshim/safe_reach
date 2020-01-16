@@ -72,10 +72,16 @@ class PrimaryButton extends StatelessWidget {
 class BlueButton extends StatelessWidget {
   final String _label;
   final Function _onPressed;
+  final Color _changeColor;
 
-  BlueButton({Key key, @required String label, @required Function onPressed})
+  BlueButton(
+      {Key key,
+      @required String label,
+      @required Function onPressed,
+      Color changeColor})
       : _label = label,
         _onPressed = onPressed,
+        _changeColor = changeColor ?? AppColor.BLUE,
         super(key: key);
 
   @override
@@ -86,9 +92,8 @@ class BlueButton extends StatelessWidget {
         this._label,
         style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
       ),
-      color: AppColor.BLUE,
+      color: _changeColor,
       elevation: 5,
-      splashColor: AppColor.BLUE_DARK,
       highlightElevation: 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(28),

@@ -62,7 +62,7 @@ class LocationRepository {
     double y2 = end.coordinates.latitude;
 
     var url =
-        "https://api.mapbox.com/directions/v5/mapbox/driving/$x1,$y1;$x2,$y2.json?access_token=${ApiKey.DIRECTION_API}&geometries=geojson";
+        "https://api.mapbox.com/directions/v5/mapbox/walking/$x1,$y1;$x2,$y2.json?access_token=${ApiKey.DIRECTION_API}&steps=true&alternatives=true&overview=full&geometries=geojson";
     var response = await http.get(url);
     var responseJson = JsonDecoder().convert(response.body);
 
