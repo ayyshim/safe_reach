@@ -8,6 +8,7 @@ import 'package:safe_reach/src/data/model/user_model.dart';
 import 'package:safe_reach/src/data/repository/tracking_repository.dart';
 import 'package:safe_reach/src/ui/widget/appBar.dart';
 import 'package:safe_reach/src/ui/widget/button.dart';
+import 'package:safe_reach/src/ui/widget/card.dart';
 import 'package:safe_reach/src/ui/widget/loading_screen.dart';
 
 class TrackingScreen extends StatefulWidget {
@@ -44,7 +45,15 @@ class _TrackingScreenState extends State<TrackingScreen> {
               customAppBar(title: "Navigator", backgroundColor: Colors.white),
           body: BlocListener(
             bloc: _trackingMapBloc,
-            listener: (BuildContext context, TrackingMapState state) {},
+            listener: (BuildContext context, TrackingMapState state) {
+              if (state is AlertSent) {
+                Scaffold.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(
+                      content: Text("Alert sent to your emergency contacts."),
+                      backgroundColor: AppColor.GREEN));
+              }
+            },
             child: BlocBuilder(
               bloc: _trackingMapBloc,
               builder: (BuildContext context, TrackingMapState state) {
@@ -67,6 +76,18 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       myLocationButtonEnabled: true,
                       polylines: _trackingMapBloc.polylines,
                     ),
+                    _trackingMapBloc.isTracking
+                        ? Positioned(
+                            top: 10,
+                            left: 10,
+                            child: CustomCard(
+                              content: Text(
+                                  '${_trackingMapBloc.timeLeftForNextAlert}',
+                                  style: TextStyle(
+                                      color: AppColor.RED, fontSize: 22)),
+                            ),
+                          )
+                        : SizedBox(),
                     Positioned(
                       bottom: 10,
                       right: 10,

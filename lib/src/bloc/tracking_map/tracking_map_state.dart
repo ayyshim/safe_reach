@@ -14,4 +14,10 @@ enum _TrackingMapState {
   TrackingStarted,
   @object
   TrackingStopped,
+  @object
+  AlertSent,
+  @object
+  TickerUpdate,
+  @object
+  TickerUpdated
 }

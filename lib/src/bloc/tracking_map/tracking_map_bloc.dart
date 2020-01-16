@@ -37,15 +37,29 @@ class TrackingMapBloc extends Bloc<TrackingMapEvent, TrackingMapState> {
   int notifyDuration = 30; // 600 = 10 minutes
   StreamSubscription notifyTimerSubscription;
 
+  String timeLeftForNextAlert;
+
   @override
   Stream<TrackingMapState> mapEventToState(
     TrackingMapEvent event,
   ) async* {
     yield* event.when(
-      loadMap: (e) => _mapLoadMap2State(e),
-      startTracking: (_) => _mapStartTracking2State(),
-      stopTracking: (_) => _mapStopTracking2State(),
-    ) as Stream;
+        sendAlert: (_) => _mapSendAlert2State(),
+        loadMap: (e) => _mapLoadMap2State(e),
+        startTracking: (_) => _mapStartTracking2State(),
+        stopTracking: (_) => _mapStopTracking2State(),
+        updateTicker: (_) => _mapUpdateTicker2State()) as Stream;
+  }
+
+  Stream<TrackingMapState> _mapSendAlert2State() async* {
+    yield TrackingMapState.alertSent();
+    add(TrackingMapEvent.startTracking());
+  }
+
+  Stream<TrackingMapState> _mapUpdateTicker2State() async* {
+    print("OK");
+    yield TrackingMapState.tickerUpdate();
+    yield TrackingMapState.tickerUpdated();
   }
 
   Stream<TrackingMapState> _mapLoadMap2State(LoadMap e) async* {
@@ -76,6 +90,7 @@ class TrackingMapBloc extends Bloc<TrackingMapEvent, TrackingMapState> {
   }
 
   Stream<TrackingMapState> _mapStartTracking2State() async* {
+    this.timeLeftForNextAlert = alertDuration.toString();
     trackingSub?.cancel();
     this.isTracking = true;
     trackingSub =
@@ -89,27 +104,24 @@ class TrackingMapBloc extends Bloc<TrackingMapEvent, TrackingMapState> {
           .then((result) {
         if (result == true) {
           print("On path");
-          trackingSub.cancel();
-          alertTimerSubscription?.cancel();
-          notifyTimerSubscription =
-              _trackingRepository.alertTicker(notifyDuration).listen((x) {
-            if (x == 0) {
-              notifyTimerSubscription.cancel();
-              add(TrackingMapEvent.startTracking());
-            }
-          });
         } else {
           print("Out of path");
           trackingSub.cancel();
           notifyTimerSubscription?.cancel();
           alertTimerSubscription =
-              _trackingRepository.alertTicker(alertDuration).listen((x) {
+              _trackingRepository.alertTicker(alertDuration).listen((x) async {
+            add(TrackingMapEvent.updateTicker());
             print("T minus $x seconds remain for next alert.");
+            if (x < 10) {
+              this.timeLeftForNextAlert = '0$x';
+            } else {
+              this.timeLeftForNextAlert = '$x';
+            }
             if (x == 0) {
               alertTimerSubscription.cancel();
-              _trackingRepository.sendAlert(
+              await _trackingRepository.sendAlert(
                   user: currentUser, location: location);
-              add(TrackingMapEvent.startTracking());
+              add(TrackingMapEvent.sendAlert());
             }
           });
         }

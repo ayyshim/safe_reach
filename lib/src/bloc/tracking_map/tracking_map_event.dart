@@ -12,4 +12,8 @@ enum _TrackingMapEvent {
   StartTracking,
   @object
   StopTracking,
+  @object
+  SendAlert,
+  @object
+  UpdateTicker
 }
