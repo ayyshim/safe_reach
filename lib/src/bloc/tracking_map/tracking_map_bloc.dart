@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:google_map_polyutil/google_map_polyutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:lop_polyutil/lop_polyutil.dart';
 import 'package:meta/meta.dart';
 import 'package:safe_reach/src/constants/colors.dart';
 import 'package:safe_reach/src/data/model/loc_model.dart';
@@ -100,7 +100,8 @@ class TrackingMapBloc extends Bloc<TrackingMapEvent, TrackingMapState> {
           .toList();
       LatLng current =
           LatLng(location.coordinates.latitude, location.coordinates.longitude);
-      LopPolyutil.isLocationOnPath(path: path, point: current, radius: 500.0)
+      GoogleMapPolyUtil.isLocationOnPath(
+              polygon: path, point: current, tolerance: 500.0)
           .then((result) {
         if (result == true) {
           print("On path");

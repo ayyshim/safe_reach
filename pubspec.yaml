@@ -34,10 +34,7 @@ dependencies:
   geocoder: ^0.2.1
   google_maps_flutter: ^0.5.21+15
   location: ^2.3.5
-  geolocator: ^5.2.0
-  google_map_polyline: ^0.2.0+1
-  google_maps_util: ^0.0.3
-  lop_polyutil: ^0.0.1
+  google_map_polyutil: ^1.0.0
 
   http: ^0.12.0+4
 
