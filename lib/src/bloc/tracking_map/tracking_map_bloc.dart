@@ -111,18 +111,28 @@ class TrackingMapBloc extends Bloc<TrackingMapEvent, TrackingMapState> {
           notifyTimerSubscription?.cancel();
           alertTimerSubscription =
               _trackingRepository.alertTicker(alertDuration).listen((x) async {
-            add(TrackingMapEvent.updateTicker());
-            print("T minus $x seconds remain for next alert.");
-            if (x < 10) {
-              this.timeLeftForNextAlert = '0$x';
-            } else {
-              this.timeLeftForNextAlert = '$x';
-            }
-            if (x == 0) {
+            Loc rnLocation = await _trackingRepository.getCurrentLocation();
+            bool isBackInPath = await GoogleMapPolyUtil.isLocationOnPath(
+                point: LatLng(rnLocation.coordinates.latitude,
+                    rnLocation.coordinates.longitude),
+                polygon: path);
+            if (isBackInPath) {
               alertTimerSubscription.cancel();
-              await _trackingRepository.sendAlert(
-                  user: currentUser, location: location);
-              add(TrackingMapEvent.sendAlert());
+              add(TrackingMapEvent.startTracking());
+            } else {
+              add(TrackingMapEvent.updateTicker());
+              print("T minus $x seconds remain for next alert.");
+              if (x < 10) {
+                this.timeLeftForNextAlert = '0$x';
+              } else {
+                this.timeLeftForNextAlert = '$x';
+              }
+              if (x == 0) {
+                alertTimerSubscription.cancel();
+                await _trackingRepository.sendAlert(
+                    user: currentUser, location: location);
+                add(TrackingMapEvent.sendAlert());
+              }
             }
           });
         }

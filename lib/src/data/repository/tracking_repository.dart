@@ -58,4 +58,13 @@ class TrackingRepository {
     await response.transform(utf8.decoder).join();
     httpClient.close();
   }
+
+  Future<Loc> getCurrentLocation() async {
+    LocationData locationData = await _location.getLocation();
+    Coordinates coordinates =
+        new Coordinates(locationData.latitude, locationData.longitude);
+
+    var address = await _geocoding.findAddressesFromCoordinates(coordinates);
+    return Loc(label: address.first.addressLine, coordinates: coordinates);
+  }
 }
