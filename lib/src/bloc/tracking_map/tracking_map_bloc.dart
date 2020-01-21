@@ -94,12 +94,10 @@ class TrackingMapBloc extends Bloc<TrackingMapEvent, TrackingMapState> {
     trackingSub?.cancel();
     this.isTracking = true;
     trackingSub =
-        _trackingRepository.userCurrentLocation().listen((Loc location) {
+        _trackingRepository.userCurrentLocation().listen((LatLng current) {
       List<LatLng> path = route.polylines
           .map((point) => LatLng(point.latitude, point.longitude))
           .toList();
-      LatLng current =
-          LatLng(location.coordinates.latitude, location.coordinates.longitude);
       GoogleMapPolyUtil.isLocationOnPath(
               polygon: path, point: current, tolerance: 500.0)
           .then((result) {
@@ -111,10 +109,9 @@ class TrackingMapBloc extends Bloc<TrackingMapEvent, TrackingMapState> {
           notifyTimerSubscription?.cancel();
           alertTimerSubscription =
               _trackingRepository.alertTicker(alertDuration).listen((x) async {
-            Loc rnLocation = await _trackingRepository.getCurrentLocation();
+            LatLng rnLocation = await _trackingRepository.getCurrentLocation();
             bool isBackInPath = await GoogleMapPolyUtil.isLocationOnPath(
-                point: LatLng(rnLocation.coordinates.latitude,
-                    rnLocation.coordinates.longitude),
+                point: rnLocation,
                 polygon: path);
             if (isBackInPath) {
               alertTimerSubscription.cancel();
@@ -130,7 +127,7 @@ class TrackingMapBloc extends Bloc<TrackingMapEvent, TrackingMapState> {
               if (x == 0) {
                 alertTimerSubscription.cancel();
                 await _trackingRepository.sendAlert(
-                    user: currentUser, location: location);
+                    user: currentUser, location: current);
                 add(TrackingMapEvent.sendAlert());
               }
             }
